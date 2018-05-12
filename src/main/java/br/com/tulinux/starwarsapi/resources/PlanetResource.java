@@ -6,19 +6,20 @@ import br.com.tulinux.starwarsapi.services.PlanetService;
 import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * Planet Resource
  */
 
-@Controller
+@RestController
 @RequestMapping("/planets")
 public class PlanetResource {
 
@@ -35,10 +36,11 @@ public class PlanetResource {
      * @return Retorna a lista de Planetas e o Status 200
      */
     @GetMapping
-    @ApiOperation(value = "Visualiza a lista de planetas")
-    public ResponseEntity getAllPlanets() {
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Retorna a lista planetas")
+    public List<Planet> getAllPlanets() {
 
-        return new ResponseEntity<>(planetService.getAll(), HttpStatus.OK);
+        return planetService.getAll();
     }
 
     /**
@@ -80,7 +82,7 @@ public class PlanetResource {
             throw new ResourceNotFoundException("Planeta não localizado!");
         }
 
-        // updatedPlanet.setId(planet.getId());
+        updatedPlanet.setId(planet.getId());
 
         return new ResponseEntity<>(planetService.updatePlanet(updatedPlanet), HttpStatus.OK);
     }
@@ -93,9 +95,16 @@ public class PlanetResource {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "Busca uma planeta por um ID", response = Planet.class)
-    public ResponseEntity findPlanetById(@PathVariable String id) {
+    @ResponseStatus(HttpStatus.OK)
+    public Planet findPlanetById(@PathVariable String id) {
 
-        return new ResponseEntity<>(planetService.findPlanetById(id), HttpStatus.OK);
+        Planet planetById = planetService.findPlanetById(id);
+
+        if (planetById == null) {
+            throw new ResourceNotFoundException("Planeta não localizado!");
+        }
+
+        return planetById;
     }
 
     /**
@@ -104,11 +113,20 @@ public class PlanetResource {
      * @param name Nome do Planeta a ser localizado
      * @return Retorna um Planeta
      */
-    @GetMapping("/{name}")
+    @GetMapping(params = "name")
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Busca uma planeta por Nome", response = Planet.class)
-    public ResponseEntity findPlanetByName(@PathVariable String name) {
+    public Planet findPlanetByName(@Param("name") String name) {
 
-        return new ResponseEntity<>(planetService.findPlanetByName(name), HttpStatus.OK);
+        Planet planetByName = planetService.findPlanetByName(name);
+
+        if (planetByName == null) {
+            throw new ResourceNotFoundException("Planeta não localizado!");
+        }
+
+        // Preconditions.checkNotNull(planetByName);
+
+        return planetByName;
     }
 
     /**
@@ -121,9 +139,17 @@ public class PlanetResource {
     @ApiOperation(value = "Apaga um planeta")
     public ResponseEntity deletePlanet(@PathVariable String id) {
 
-        planetService.deletePlanetById(id);
+        Planet planetById = planetService.findPlanetById(id);
 
-        return new ResponseEntity<>("Planeta excluido com sucesso!", HttpStatus.OK);
+        if (planetById == null) {
+
+            throw new ResourceNotFoundException("Planeta não localizado!");
+        } else {
+
+            planetService.deletePlanetById(id);
+
+            return new ResponseEntity<>("Planeta excluido com sucesso!", HttpStatus.OK);
+        }
     }
 
     /**

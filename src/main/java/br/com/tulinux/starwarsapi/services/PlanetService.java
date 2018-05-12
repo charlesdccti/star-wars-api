@@ -45,7 +45,7 @@ public class PlanetService {
     /**
      * Altera um Planeta
      *
-     * @param planet Alterações a efetuar
+     * @param planet Planet com as alterações a efetuar
      * @return Retorna o Planeta alterado
      */
     public Planet updatePlanet(Planet planet) {

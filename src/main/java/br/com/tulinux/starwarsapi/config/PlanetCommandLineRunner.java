@@ -20,7 +20,7 @@ public class PlanetCommandLineRunner implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlanetCommandLineRunner.class);
 
-    private final MongoTemplate mongoTemplate;
+     private final MongoTemplate mongoTemplate;
 
     @Autowired
     public PlanetCommandLineRunner(MongoTemplate mongoTemplate) {

@@ -1,8 +1,7 @@
 package br.com.tulinux.starwarsapi.models;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,9 +10,12 @@ import java.util.List;
 /**
  * Documento do MongoDB referente a cada Planeta
  */
-@Getter
-@Setter
+
+@Data
+@Builder
 @Document
+@NoArgsConstructor
+@AllArgsConstructor
 public class Planet {
 
     @Id
