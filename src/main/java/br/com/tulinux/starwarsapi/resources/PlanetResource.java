@@ -1,6 +1,6 @@
 package br.com.tulinux.starwarsapi.resources;
 
-import br.com.tulinux.starwarsapi.erros.ResourceNotFoundException;
+import br.com.tulinux.starwarsapi.errors.ResourceNotFoundException;
 import br.com.tulinux.starwarsapi.models.Planet;
 import br.com.tulinux.starwarsapi.services.PlanetService;
 import com.google.common.base.Preconditions;
@@ -22,6 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/planets")
 public class PlanetResource {
+
+    private static final String PLANETA_NAO_LOCALIZADO = "Planeta não localizado!";
 
     private PlanetService planetService;
 
@@ -79,7 +81,7 @@ public class PlanetResource {
         Planet planet = planetService.findPlanetById(id);
 
         if (planet == null) {
-            throw new ResourceNotFoundException("Planeta não localizado!");
+            throw new ResourceNotFoundException(PLANETA_NAO_LOCALIZADO);
         }
 
         updatedPlanet.setId(planet.getId());
@@ -101,7 +103,7 @@ public class PlanetResource {
         Planet planetById = planetService.findPlanetById(id);
 
         if (planetById == null) {
-            throw new ResourceNotFoundException("Planeta não localizado!");
+            throw new ResourceNotFoundException(PLANETA_NAO_LOCALIZADO);
         }
 
         return planetById;
@@ -121,10 +123,8 @@ public class PlanetResource {
         Planet planetByName = planetService.findPlanetByName(name);
 
         if (planetByName == null) {
-            throw new ResourceNotFoundException("Planeta não localizado!");
+            throw new ResourceNotFoundException(PLANETA_NAO_LOCALIZADO);
         }
-
-        // Preconditions.checkNotNull(planetByName);
 
         return planetByName;
     }
@@ -143,7 +143,7 @@ public class PlanetResource {
 
         if (planetById == null) {
 
-            throw new ResourceNotFoundException("Planeta não localizado!");
+            throw new ResourceNotFoundException(PLANETA_NAO_LOCALIZADO);
         } else {
 
             planetService.deletePlanetById(id);
@@ -163,5 +163,4 @@ public class PlanetResource {
 
         return new ResponseEntity<>(planetService.getCount(), HttpStatus.OK);
     }
-
 }
