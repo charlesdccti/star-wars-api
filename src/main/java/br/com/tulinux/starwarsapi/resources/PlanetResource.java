@@ -73,8 +73,9 @@ public class PlanetResource {
      * @return Retorna o Planeta com a alteração
      */
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Altera um planeta pelo um ID", response = Planet.class)
-    public ResponseEntity updatePlanet(@PathVariable String id, @RequestBody Planet updatedPlanet) {
+    public Planet updatePlanet(@PathVariable String id, @RequestBody Planet updatedPlanet) {
 
         Preconditions.checkNotNull(updatedPlanet);
 
@@ -86,7 +87,7 @@ public class PlanetResource {
 
         updatedPlanet.setId(planet.getId());
 
-        return new ResponseEntity<>(planetService.updatePlanet(updatedPlanet), HttpStatus.OK);
+        return planetService.updatePlanet(updatedPlanet);
     }
 
     /**

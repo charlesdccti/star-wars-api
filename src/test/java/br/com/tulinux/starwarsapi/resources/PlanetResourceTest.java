@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Planet Resource Teste
  */
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @WebMvcTest(PlanetResource.class)
 public class PlanetResourceTest {
@@ -47,28 +49,32 @@ public class PlanetResourceTest {
     // This object will be magically initialized by the initFields method below.
     private JacksonTester<Planet> planetJacksonTester;
 
+    private Planet mockPlanet;
+
+    private ObjectMapper mapper;
+
     @Before
     public void setup() {
         // Initializes the JacksonTester
         JacksonTester.initFields(this, new ObjectMapper());
+
+        mockPlanet = new Planet().builder().id("5af73129db516558cbaede77").name("Tatooine").terrain("desert").climate("arid").build();
+
+        mapper = new ObjectMapper();
     }
 
     @Test
     public void deveInserirUmPlaneta() throws Exception {
 
-        Planet mockPlanet = new Planet().builder().id("5af73129db516558cbaede77").name("Tatooine").terrain("desert").climate("arid").build();
-
         Mockito.when(
                 planetService.savePlanet(Mockito.any(Planet.class))).thenReturn(mockPlanet);
-
-
-        final ObjectMapper mapper = new ObjectMapper();
 
         final String stringPlanet = mapper.writeValueAsString(mockPlanet);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/planets")
-                .accept(MediaType.APPLICATION_JSON).content(stringPlanet)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(stringPlanet)
                 .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
@@ -82,9 +88,36 @@ public class PlanetResourceTest {
     }
 
     @Test
-    public void deveRetornarUmPlanetaQuandoLocalizadoPorNome() throws Exception {
+    public void deveAlterarUmPlaneta() throws Exception {
 
-        Planet mockPlanet = new Planet().builder().id("5af73129db516558cbaede77").name("Tatooine").terrain("desert").climate("arid").build();
+        String mockId = "5af73129db516558cbaede77";
+
+        Planet mockPlanet = new Planet().builder().name("Tatooine").terrain("desert").climate("arid").build();
+
+        Planet mockPlanetWithId = new Planet().builder().id(mockId).name("Tatooine").terrain("desert").climate("arid").build();
+
+        given(planetService.findPlanetById(mockId)).willReturn(mockPlanetWithId);
+
+        final String stringPlanet = mapper.writeValueAsString(mockPlanet);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/planets/" + mockId)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(stringPlanet)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder).andReturn();
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+    }
+
+    @Test
+    public void deveRetornarUmPlanetaQuandoLocalizadoPorNome() throws Exception {
 
         // given
         given(planetService.findPlanetByName("Tatooine"))
@@ -105,8 +138,6 @@ public class PlanetResourceTest {
     @Test
     public void deveRetornarUmPlanetaQuandoLocalizadoPeloId() throws Exception {
 
-        Planet mockPlanet = new Planet().builder().id("5af73129db516558cbaede77").name("Tatooine").terrain("desert").climate("arid").build();
-
         given(planetService.findPlanetById(mockPlanet.getId())).willReturn(mockPlanet);
 
         mockMvc.perform(get("/planets/" + mockPlanet.getId())
@@ -117,8 +148,6 @@ public class PlanetResourceTest {
 
     @Test
     public void deveGerarUmErroQuandoNaoEncontradoPorNome() throws Exception {
-
-        Planet mockPlanet = new Planet().builder().id("5af73129db516558cbaede77").name("Tatooine").terrain("desert").climate("arid").build();
 
         given(planetService.findPlanetByName(mockPlanet.getName())).willReturn(null);
 
