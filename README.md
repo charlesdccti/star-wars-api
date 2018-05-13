@@ -17,12 +17,14 @@ Requisitos:
 
 Funcionalidades desejadas: 
 
-- Adicionar um planeta (com nome, clima e terreno)
-- Listar planetas
-- Buscar por nome
-- Buscar por ID
-- Remover planeta
-Linguagens que usamos: Java, Go, Clojure, Node, Python
+- [x] Adicionar um planeta (com nome, clima e terreno)
+- [x] Listar planetas
+- [x] Buscar por nome
+- [x] Buscar por ID
+- [x] Remover planeta
+
+
+Linguagens que usamos: Java, Go, Clojure, Node, Python 
 Bancos que usamos: MongoDB, Cassandra, DynamoDB, Datomic
 
 E lembre-se! Um bom software é um software bem testado.
