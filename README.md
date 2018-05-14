@@ -1,5 +1,4 @@
-
-Dando continuidade ao nosso processo, temos um desafio para te propor! o/
+# STAR WARS API
 
 Nossos associados são aficionados por Star Wars e com isso, queremos criar um jogo com algumas informações da franquia.
  
@@ -23,11 +22,103 @@ Funcionalidades desejadas:
 - [x] Buscar por ID
 - [x] Remover planeta
 
-
-Linguagens que usamos: Java, Go, Clojure, Node, Python 
-Bancos que usamos: MongoDB, Cassandra, DynamoDB, Datomic
-
-E lembre-se! Um bom software é um software bem testado.
-
-
 May the force be with you!
+
+## Arquivos do Projeto
+
+```text
+├── docker-compose.yml
+├── Dockerfile
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── br
+│   │   │       └── com
+│   │   │           └── tulinux
+│   │   │               └── starwarsapi
+│   │   │                   ├── config
+│   │   │                   │   ├── PlanetCommandLineRunner.java
+│   │   │                   │   └── SwaggerConfig.java
+│   │   │                   ├── errors
+│   │   │                   │   ├── BadRequestException.java
+│   │   │                   │   └── ResourceNotFoundException.java
+│   │   │                   ├── models
+│   │   │                   │   └── Planet.java
+│   │   │                   ├── repositories
+│   │   │                   │   └── PlanetRespository.java
+│   │   │                   ├── resources
+│   │   │                   │   └── PlanetResource.java
+│   │   │                   ├── services
+│   │   │                   │   └── PlanetService.java
+│   │   │                   └── StarWarsApiApplication.java
+│   │   └── resources
+│   │       ├── application-prod.properties
+│   │       ├── application.properties
+│   │       └── application-test.properties
+│   └── test
+│       └── java
+│           └── br
+│               └── com
+│                   └── tulinux
+│                       └── starwarsapi
+│                           ├── repositories
+│                           │   └── PlanetRespositoryTest.java
+│                           ├── resources
+│                           │   └── PlanetResourceTest.java
+│                           ├── services
+│                           │   └── PlanetServiceTest.java
+│                           └── StarWarsApiApplicationTests.java
+└── star-wars-api.iml
+
+23 directories, 23 files
+
+```
+
+## Uso
+
+```bash
+$ mvn spring-boot:run
+```
+
+## Desenvolvimento
+
+### Pré-requisitos
+
+* [Java 8](http://www.oracle.com/technetwork/pt/java/javase/downloads/jdk8-downloads-2133151.html)
+* [Maven](https://maven.apache.org)
+* [Docker CE](https://www.docker.com/community-edition)
+* [Docker Compose](https://docs.docker.com/compose/)
+
+### Clone do respositório
+
+```bash
+$ git clone https://github.com/deyvedvm/star-wars-api.git
+```
+
+### Executando pelo Docker Compose
+
+```bash
+$ cd star-wars-api/
+
+$ mvn package
+
+$ docker-compose build
+
+$ docker-compose up
+
+```
+
+A aplicação ira responder em `http://localhost:8182/`
+
+
+# Autor
+
+Deyve Vieira 
+
+[Twitter](https://twitter.com/deyvedvm)
+
+[Github](https://github.com/deyvedvm)
