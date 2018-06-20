@@ -1,6 +1,6 @@
 FROM openjdk:8-alpine
 
-MAINTAINER Deyve Vieira
+MAINTAINER Deyve Vieira <deyvedvm@hotmail.com>
 
 RUN apk update && apk add bash
 
